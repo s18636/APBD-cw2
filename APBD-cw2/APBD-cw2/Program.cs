@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace APBD_cw2
 {
@@ -11,7 +12,7 @@ namespace APBD_cw2
         static void Main(string[] args)
         {
             string CSVPath = "C:\\Users\\kubas\\OneDrive - Polsko-Japońska Wyższa Szkoła Technik Komputerowych\\Dokumenty\\APBD\\APBD-cw2\\APBD-cw2\\APBD-cw2\\APBD-cw2\\data\\dane.csv";
-            string outputPath = "data/result.xml";
+            string outputPath = "data\\result.xml";
             string dataType = "xml";
 
             if (args.Length == 3)
@@ -91,9 +92,13 @@ namespace APBD_cw2
                 WriteToLog("podana sciezka jest niepoprawna");
             }
 
-            Console.Write(students.Count);
-
+            FileStream writer = new FileStream(@"data.xml", FileMode.Create);
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Student>), new XmlRootAttribute("uczelnia"));
+            
+            serializer.Serialize(writer, students);
         }
+
+
 
         public static void WriteToLog(string msg)
         {
