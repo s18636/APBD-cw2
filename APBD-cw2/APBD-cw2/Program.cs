@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace APBD_cw2
@@ -8,7 +10,7 @@ namespace APBD_cw2
 
         static void Main(string[] args)
         {
-            string CSVPath = "data/dane.csv";
+            string CSVPath = "C:\\Users\\kubas\\OneDrive - Polsko-Japońska Wyższa Szkoła Technik Komputerowych\\Dokumenty\\APBD\\APBD-cw2\\APBD-cw2\\APBD-cw2\\APBD-cw2\\data\\dane.csv";
             string outputPath = "data/result.xml";
             string dataType = "xml";
 
@@ -52,6 +54,44 @@ namespace APBD_cw2
             }
 
             Console.Write($"input: {CSVPath} output: {outputPath} type: {dataType}");
+
+            List<Student> students = new List<Student>();
+            try
+            {
+                using (var reader = new StreamReader(CSVPath))
+                {
+                    
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(',');
+
+                        if (values.Length != 9) continue;
+
+                        Student tmp = new Student()
+                        {
+                            fname = values[0],
+                            lname = values[1],
+                            studiesName = values[2],
+                            studiesMode = values[3],
+                            indexNumber = Int32.Parse(values[4]),
+                            birthdate = values[5],
+                            email = values[6],
+                            mothersName = values[7],
+                            fathersName = values[8]
+
+                        };
+
+                        students.Add(tmp);
+                    }
+                }
+            }
+            catch (IOException exc)
+            {
+                WriteToLog("podana sciezka jest niepoprawna");
+            }
+
+            Console.Write(students.Count);
 
         }
 
